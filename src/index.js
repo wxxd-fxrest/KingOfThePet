@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const authRoutes = require('./router/authRoutes.js');
 const postRoutes = require('./router/postRoutes.js');
+// const imageUploadeRoutes = require('./router/imageUploadeRoutes.js');
 
 const app = express();
 const PORT = 3000;
