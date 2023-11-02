@@ -14,7 +14,7 @@ app.use('/auths', authRoutes);
 app.use('/posts', postRoutes);
 
 app.get('/', (req, res) => {
-    res.send("<h2>Hello world!</h2>");
+    res.send('<h2>Hello world!</h2>');
 });
 
 app.listen(PORT, () => {
