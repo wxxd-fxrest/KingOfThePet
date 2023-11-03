@@ -15,7 +15,7 @@ export const apiSlice = createApi({
         }),
         createPost: builder.mutation({
             query: (newPost) => ({
-                url: 'posts',
+                url: 'posts/upload-profile',
                 method: 'POST',
                 body: newPost,
             }),
@@ -27,12 +27,22 @@ export const apiSlice = createApi({
                 body: newAuth,
             }),
         }),
+        getAllAuths: builder.query({
+            query: () => 'auths',
+        }),
         getAuth: builder.query({
-            query: (ref) => `auths/${ref}`,
+            query: (id) => `auths/${id}`,
         }),
     }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useCreateAuthMutation, useGetAuthQuery, useGetAllPostsQuery, useGetPostQuery, useCreatePostMutation } = apiSlice;
+export const {
+    useCreateAuthMutation,
+    useGetAuthQuery,
+    useGetAllAuthsQuery,
+    useGetAllPostsQuery,
+    useGetPostQuery,
+    useCreatePostMutation,
+} = apiSlice;

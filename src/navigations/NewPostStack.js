@@ -10,8 +10,6 @@ const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window');
 const Tab = createMaterialTopTabNavigator();
 
 const NewPostStack = () => {
-    const [newPost, setNewPost] = useState('');
-
     return (
         <Tab.Navigator
             screenOptions={{
@@ -47,25 +45,6 @@ const NewPostStack = () => {
                 }}
             />
         </Tab.Navigator>
-        // <Container>
-        //     <NewPostInputBox>
-        //         <NewPostInput value={newPost}
-        //             placeholder="내용을 입력해 주세요."
-        //             placeholderTextColor="gray"
-        //             autoCapitalize="none"
-        //             autoCorrect={false}
-        //             maxLength={300}
-        //             multiline={true}
-        //             returnKeyType="search"
-        //             onChangeText={(text) => setNewPost(text)}
-        //         />
-        //         <NewPostFooterBox>
-        //             <ImgSelectIconBox>
-        //                 <Ionicons name="ios-camera" size={28} color="#6b8a47" />
-        //             </ImgSelectIconBox>
-        //         </NewPostFooterBox>
-        //     </NewPostInputBox>
-        // </Container>
     );
 };
 
