@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 
 const authRoutes = require('./router/authRoutes.js');
 const postRoutes = require('./router/postRoutes.js');
-// const imageUploadeRoutes = require('./router/imageUploadeRoutes.js');
 
 const app = express();
 const PORT = 3000;
@@ -12,6 +11,7 @@ app.use(bodyParser.json());
 
 app.use('/auths', authRoutes);
 app.use('/posts', postRoutes);
+app.use(express.static('/images'));
 
 app.get('/', (req, res) => {
     res.send('<h2>Hello world!</h2>');
@@ -20,5 +20,3 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
     console.log('API is listening on port ', PORT);
 });
-
-// https://github.com/wxxd-fxrest/KingOfThePet.git

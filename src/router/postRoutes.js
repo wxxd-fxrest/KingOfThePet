@@ -4,19 +4,6 @@ const { getAllPosts, getPost, createPost } = require('../database/posts');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid'); // uuid 모듈 추가
 
-// multer 설정
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, 'uploads/'); // 이미지 저장 폴더 설정
-//     },
-//     filename: (req, file, cb) => {
-//         const uniqueFilename = `${uuidv4()}-${file.originalname}`; // 고유한 파일 이름 생성
-//         cb(null, uniqueFilename);
-//     },
-// });
-
-// const upload = multer({ storage: storage });
-
 router.get('/', async (req, res) => {
     const posts = await getAllPosts();
     res.send({ status: 'OK', data: posts });
@@ -37,38 +24,32 @@ router.get('/:postID', async (req, res) => {
     }
 });
 
-// router.post('/', upload.single('new_post_img'), async (req, res) => {
-//     // 이미지 업로드가 먼저 수행되므로 이미 업로드된 이미지를 사용
-//     const postData = req.body;
-//     postData.image = req.file.path; // 이미지 경로를 postData에 추가
+const storage = multer.diskStorage({});
 
-//     const ref = uuidv4();
-//     postData.ref = ref;
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image')) {
+        cb(null, true);
+        // console.log(req.rawHeaders);
+    } else {
+        cb('invalid image file!', false);
+    }
+};
 
-//     const newPost = await createPost(postData);
-
-//     res.status(201).send({ status: 'OK', data: newPost });
-// });
-
-// multer-optional
-// multer-optional
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + file.originalname);
-    },
-});
-
-const upload = multer({ storage });
-
-// 이미지 업로드 엔드포인트
-router.post('./posts/upload', upload.single('profile_img'), (req, res) => {
+const uploads = multer({ storage, fileFilter });
+// 이미지 url이 같이 업로드되지 않음
+router.post('/upload-profile', uploads.single('post_image'), async (req, res) => {
+    const postData = req.body;
+    const ref = (Math.random() + 1).toString(36).substring(7);
+    postData.ref = ref;
     const image = req.file;
-    // 이미지 업로드 후 MongoDB에 저장할 수 있음
-    // 여기에서 MongoDB에 이미지 정보를 저장하는 로직을 추가하세요
-    res.json({ success: true, message: 'Image uploaded successfully' });
+    console.log('postData', postData);
+
+    const newPost = await createPost({
+        image,
+        postData,
+    });
+
+    res.status(201).send({ status: 'OK', data: newPost });
 });
 
 module.exports = router;
