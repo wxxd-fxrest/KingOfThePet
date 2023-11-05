@@ -1,81 +1,99 @@
-import React, { useState } from "react";
-import { ActivityIndicator, FlatList, Text, TextInput } from "react-native";
-import { useSelector } from "react-redux";
-import styled from "styled-components";
-import { useCreatePostMutation, useGetAllPostsQuery, useGetPostQuery } from "../../store/apiSlice";
+import React from 'react';
+import { ActivityIndicator, FlatList, Text } from 'react-native';
+import styled from 'styled-components';
+import { useGetAllPostsQuery } from '../../store/apiSlice';
+import UserImg from '../../assets/user.png';
 
 const AllScreen = ({ currentUser }) => {
-    // const postdata = useSelector((state) => state.postdata.postdata);
-    // console.log("all", currentUser.email)
-
     const { data, error, isLoading } = useGetAllPostsQuery();
+    // console.log(data?.data);
+    // let imgdata = data?.data[3].imgData.path;
+    console.log(data?.data[1].imgData.path);
 
     if (isLoading) {
         return <ActivityIndicator />;
     }
-    
-    if(error) {
-        console.log(error.error)
-        return <Text> {error.error} </Text>
+
+    if (error) {
+        console.log(error.error);
+        return <Text> {error.error} </Text>;
     }
 
-    const postdata = data.data; 
+    const postdata = data?.data;
+
+    // 이미지 바인딩... 해야 해...
 
     return (
         <Container>
-            <FlatList data={postdata}
+            <FlatList
+                data={postdata}
                 renderItem={({ item }) => (
                     <PostBox>
-                        <PostProfileImg source={{uri: item.userimg}}/>
+                        <PostProfileImgBox>
+                            {/* <PostProfileImg
+                                source={
+                                    item.userData && item.userData.userimg ? { uri: item.imgData.filename } : UserImg
+                                }
+                            /> */}
+                            <PostProfileImg source={UserImg} />
+                        </PostProfileImgBox>
                         <PostDataBox>
                             <PostNameQnA>
-                                <PostProfileName> {item.username} </PostProfileName>
-                                {item.qna_boolen === true &&
+                                <PostProfileName> {item.userData.username} </PostProfileName>
+                                {item.postData.QnA === true && (
                                     <QnABox>
                                         <PostQnA> 질문 </PostQnA>
                                     </QnABox>
-                                }
+                                )}
                             </PostNameQnA>
-                            {item.image &&
+                            {/* {item.imgData && (
                                 <PostImgBox>
-                                    <PostImg source={{uri: item.image}} />
+                                    <PostImg
+                                        source={item.imgData && item.imgData.path ? { uri: item.imgData.path } : ''}
+                                    />
                                 </PostImgBox>
-                            }
-                            {item.description &&
-                                <PostText> {item.description} </PostText>
-                            }
+                            )} */}
+
+                            <PostImg source={{ uri: item.imgData.filename }} />
+
+                            {item.postData && <PostText> {item.postData.text} </PostText>}
                         </PostDataBox>
                     </PostBox>
                 )}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item._id + ''}
                 showsVerticalScrollIndicator={false}
             />
         </Container>
-    )
+    );
 };
-
+// /Users/drizzle/KingOfThePet/KingOfThePetBackend/images
 const Container = styled.View`
     flex: 1;
     background-color: white;
-    /* padding: 0px 15px; */
 `;
 
 const PostBox = styled.View`
     flex-direction: row;
-    /* background-color: rgba(107, 138, 71, 0.4); */
     background-color: #d3e2c2;
     margin: 18px 20px;
     padding: 10px;
     border-radius: 20px;
 `;
 
+const PostProfileImgBox = styled.View`
+    background-color: gray;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    border-radius: 100px;
+    justify-content: center;
+    align-items: center;
+`;
+
 const PostProfileImg = styled.Image`
     width: 40px;
     height: 40px;
     border-radius: 100px;
-    position: absolute;
-    top: -10px;
-    right: -10px;
 `;
 
 const PostDataBox = styled.View`
@@ -141,5 +159,4 @@ const ButtonText = styled.Text`
     color: white;
 `;
 
-
-export default AllScreen; 
+export default AllScreen;

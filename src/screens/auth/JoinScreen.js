@@ -1,14 +1,14 @@
-import React, { useRef, useState } from "react";
-import styled from "styled-components";
+import React, { useRef, useState } from 'react';
+import styled from 'styled-components';
 import auth from '@react-native-firebase/auth';
-import { ActivityIndicator, Alert } from "react-native";
-import { useCreateAuthMutation } from "../../store/apiSlice";
+import { ActivityIndicator, Alert } from 'react-native';
+import { useCreateAuthMutation } from '../../store/apiSlice';
 
 const JoinScreen = ({ navigation }) => {
     const [createAuth, { data, isLoading, error }] = useCreateAuthMutation();
-    
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const passwordInput = useRef();
 
@@ -18,88 +18,86 @@ const JoinScreen = ({ navigation }) => {
 
     let useremail;
     let username;
-    
+
     const onSubmitPasswordEditing = async () => {
-        if(email === "" || password === "") {
-            return Alert.alert("Fill in the form."); 
+        if (email === '' || password === '') {
+            return Alert.alert('Fill in the form.');
         }
 
-        if(loading) {
-            return; 
+        if (loading) {
+            return;
         }
 
         try {
-            const userCredential = await auth().createUserWithEmailAndPassword(email, password); 
+            const userCredential = await auth().createUserWithEmailAndPassword(email, password);
             useremail = userCredential.user.email;
             username = userCredential.user.email.split('@')[0];
             const result = createAuth({
-                users: {
-                    useremail,
-                    username,
-                }
+                useremail,
+                username,
+                userimg: '',
             });
-            // 결과를 반환하므로 함수 호출을 삭제
-            // result();
-            // 성공 메시지 또는 다른 조치를 수행
+
             console.log('회원가입 및 데이터 저장이 성공하였습니다.');
-        } catch(e) {
+        } catch (e) {
             switch (e.code) {
-                case "auth/user-not-found" || "auth/wrong-password":
-                  return Alert.alert("이메일 혹은 비밀번호가 일치하지 않습니다.", [
-                    {
-                        text: "확인",
-                        onPress: () => setLoading(false),
-                    },
-                ]);
-                case "auth/email-already-in-use":
-                  return Alert.alert("이미 사용 중인 이메일입니다.", [
-                    {
-                        text: "확인",
-                        onPress: () => setLoading(false),
-                    },
-                ]);
-                case "auth/weak-password":
-                  return Alert.alert("비밀번호는 6글자 이상이어야 합니다.", [
-                    {
-                        text: "확인",
-                        onPress: () => setLoading(false),
-                    },
-                ]);
-                case "auth/network-request-failed":
-                  return Alert.alert("네트워크 연결에 실패 하였습니다.", [
-                    {
-                        text: "확인",
-                        onPress: () => setLoading(false),
-                    },
-                ]);
-                case "auth/invalid-email":
-                  return Alert.alert("잘못된 이메일 형식입니다.", [
-                    {
-                        text: "확인",
-                        onPress: () => setLoading(false),
-                    },
-                ]);
-                case "auth/internal-error":
-                  return Alert.alert("잘못된 요청입니다.", [
-                    {
-                        text: "확인",
-                        onPress: () => setLoading(false)
-                    },
-                ]);
+                case 'auth/user-not-found' || 'auth/wrong-password':
+                    return Alert.alert('이메일 혹은 비밀번호가 일치하지 않습니다.', [
+                        {
+                            text: '확인',
+                            onPress: () => setLoading(false),
+                        },
+                    ]);
+                case 'auth/email-already-in-use':
+                    return Alert.alert('이미 사용 중인 이메일입니다.', [
+                        {
+                            text: '확인',
+                            onPress: () => setLoading(false),
+                        },
+                    ]);
+                case 'auth/weak-password':
+                    return Alert.alert('비밀번호는 6글자 이상이어야 합니다.', [
+                        {
+                            text: '확인',
+                            onPress: () => setLoading(false),
+                        },
+                    ]);
+                case 'auth/network-request-failed':
+                    return Alert.alert('네트워크 연결에 실패 하였습니다.', [
+                        {
+                            text: '확인',
+                            onPress: () => setLoading(false),
+                        },
+                    ]);
+                case 'auth/invalid-email':
+                    return Alert.alert('잘못된 이메일 형식입니다.', [
+                        {
+                            text: '확인',
+                            onPress: () => setLoading(false),
+                        },
+                    ]);
+                case 'auth/internal-error':
+                    return Alert.alert('잘못된 요청입니다.', [
+                        {
+                            text: '확인',
+                            onPress: () => setLoading(false),
+                        },
+                    ]);
                 default:
-                  return Alert.alert("로그인에 실패 하였습니다.", [
-                    {
-                        text: "확인",
-                        onPress: () => setLoading(false)
-                    },
-                ]);
-            };
+                    return Alert.alert('로그인에 실패 하였습니다.', [
+                        {
+                            text: '확인',
+                            onPress: () => setLoading(false),
+                        },
+                    ]);
+            }
         }
     };
 
     return (
         <Container>
-            <TextInput value={email} 
+            <TextInput
+                value={email}
                 placeholder="email"
                 placeholderTextColor="grey"
                 keyboardType="email-address"
@@ -107,30 +105,30 @@ const JoinScreen = ({ navigation }) => {
                 autoCorrect={false}
                 returnKeyType="next"
                 onSubmitEditing={onSubmitEmailEditing}
-                onChangeText={(text) => setEmail(text)}/>
-            <TextInput value={password} 
+                onChangeText={(text) => setEmail(text)}
+            />
+            <TextInput
+                value={password}
                 ref={passwordInput}
                 placeholder="password"
                 placeholderTextColor="grey"
                 secureTextEntry
                 returnKeyType="done"
                 onSubmitEditing={onSubmitPasswordEditing}
-                onChangeText={(text) => setPassword(text)}/>
+                onChangeText={(text) => setPassword(text)}
+            />
             <Button onPress={onSubmitPasswordEditing}>
-                {loading ? <ActivityIndicator color="white"/> : 
-                <ButtonText> Jogin </ButtonText>}
+                {loading ? <ActivityIndicator color="white" /> : <ButtonText> Jogin </ButtonText>}
             </Button>
 
             <SwitchBox>
-                <Text> 
-                    Do you own an account?
-                </Text>
-                <NextButton onPress={() => navigation.navigate("Login")}>
-                    <NextButtonText> Loin </NextButtonText> 
+                <Text>Do you own an account?</Text>
+                <NextButton onPress={() => navigation.navigate('Login')}>
+                    <NextButtonText> Loin </NextButtonText>
                 </NextButton>
             </SwitchBox>
         </Container>
-    )
+    );
 };
 
 const Container = styled.View`
@@ -166,7 +164,6 @@ const ButtonText = styled.Text`
     font-size: 16px;
     color: white;
 `;
-
 
 const SwitchBox = styled.View`
     flex-direction: row;

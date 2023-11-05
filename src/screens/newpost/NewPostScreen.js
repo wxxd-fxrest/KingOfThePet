@@ -11,20 +11,18 @@ import { useGetAllAuthsQuery, useGetAuthQuery } from '../../store/apiSlice';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window');
 
-const NewPostScreen = () => {
+const NewPostScreen = ({ route }) => {
     const [currentUser, setCurrentUser] = useState([]);
+
     const [newPost, setNewPost] = useState('');
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [imageUrl, setImageUrl] = useState('');
     const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
-    const id = currentUser.email;
-    // const { data, error, isLoading } = useGetAllAuthsQuery();
-    // console.log(data.data);
-    const { data, error, isLoading } = useGetAuthQuery(id);
-    console.log(data);
+    const useremail = currentUser.email;
+    const { data, error, isLoading } = useGetAuthQuery(useremail);
 
-    // auths 에서 로그인한 유저 데이터를 가져와야 함.
+    // console.log(data?.data);
 
     useEffect(() => {
         setCurrentUser(auth().currentUser);
@@ -68,22 +66,33 @@ const NewPostScreen = () => {
         if (imageUrl) {
             // 이미지 데이터가 있을 경우만 추가
             const localUri = imageUrl;
-            const filename = localUri.split('/').pop();
-            const match = /\.(\w+)$/.exec(filename ?? '');
-            const type = match ? `image/${match[1]}` : `image`;
+            // const filename = localUri.split('/').pop();
+            // const match = /\.(\w+)$/.exec(filename ?? '');
+            // const type = match ? `image/${match[1]}` : `image`;
             formData.append('post_image', {
-                name: new Date() + '_post_image',
+                name: '_post_image',
                 uri: localUri,
-                type: type,
+                // type: type,
+                type: 'image/jpeg',
             });
+            // formData.append('img_name', new Date() + '_post_image');
+            // formData.append('img_uri', localUri);
+            // formData.append('img_type', type);
+            // console.log(formData._parts);
         }
+
+        formData.append('user_id', data?.data._id);
+        formData.append('useremail', data?.data.useremail);
+        formData.append('username', data?.data.username);
+        formData.append('user_img', data?.data.userimg);
 
         // 서버에 데이터 전송
         await axios({
             method: 'post',
             url: 'http://localhost:3000/posts/upload-profile',
             headers: {
-                'content-type': 'multipart/form-data',
+                Accept: 'application/json',
+                // 'content-type': 'multipart/form-data',
             },
             data: formData,
         });
