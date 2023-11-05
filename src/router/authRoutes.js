@@ -7,9 +7,10 @@ router.get('/', async (req, res) => {
     res.send({ status: 'OK', data: auth });
 });
 
-router.get('/:reference', async (req, res) => {
+router.get('/:authID', async (req, res) => {
     try {
-        const auth = await getAuth(req.params.reference);
+        const auth = await getAuth(req.params.authID);
+        console.log('auth', auth);
 
         if (!auth) {
             res.status(404).send({ status: 'FAILED', error: 'Product not found' });

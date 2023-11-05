@@ -4,8 +4,9 @@ const getAllAuths = async () => {
     return await getDB().auths.find().toArray();
 };
 
-const getAuth = async (id) => {
-    return await getDB().auths.findOne({ users: { useremail: id } });
+const getAuth = async (useremail) => {
+    console.log('email', useremail);
+    return await getDB().auths.findOne({ useremail: useremail });
 };
 
 const createAuth = async (auth) => {
