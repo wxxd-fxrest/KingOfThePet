@@ -1,14 +1,11 @@
-import React from 'react';
-import { ActivityIndicator, FlatList, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, RefreshControl, Text } from 'react-native';
 import styled from 'styled-components';
 import { useGetAllPostsQuery } from '../../store/apiSlice';
 import UserImg from '../../assets/user.png';
 
-const AllScreen = ({ currentUser }) => {
+const AllScreen = () => {
     const { data, error, isLoading } = useGetAllPostsQuery();
-    // console.log(data?.data);
-    // let imgdata = data?.data[3].imgData.path;
-    console.log(data?.data[1].imgData.path);
 
     if (isLoading) {
         return <ActivityIndicator />;
@@ -21,12 +18,11 @@ const AllScreen = ({ currentUser }) => {
 
     const postdata = data?.data;
 
-    // 이미지 바인딩... 해야 해...
-
     return (
         <Container>
             <FlatList
                 data={postdata}
+                inverted={true}
                 renderItem={({ item }) => (
                     <PostBox>
                         <PostProfileImgBox>
@@ -40,22 +36,19 @@ const AllScreen = ({ currentUser }) => {
                         <PostDataBox>
                             <PostNameQnA>
                                 <PostProfileName> {item.userData.username} </PostProfileName>
-                                {item.postData.QnA === true && (
+                                {item.postData.QnA === 'true' && (
                                     <QnABox>
                                         <PostQnA> 질문 </PostQnA>
                                     </QnABox>
                                 )}
                             </PostNameQnA>
-                            {/* {item.imgData && (
+                            {item.imgData && (
                                 <PostImgBox>
                                     <PostImg
-                                        source={item.imgData && item.imgData.path ? { uri: item.imgData.path } : ''}
+                                        source={{ uri: `http://localhost:3000/images/${item.imgData.filename}` }}
                                     />
                                 </PostImgBox>
-                            )} */}
-
-                            <PostImg source={{ uri: item.imgData.filename }} />
-
+                            )}
                             {item.postData && <PostText> {item.postData.text} </PostText>}
                         </PostDataBox>
                     </PostBox>
@@ -66,7 +59,7 @@ const AllScreen = ({ currentUser }) => {
         </Container>
     );
 };
-// /Users/drizzle/KingOfThePet/KingOfThePetBackend/images
+
 const Container = styled.View`
     flex: 1;
     background-color: white;

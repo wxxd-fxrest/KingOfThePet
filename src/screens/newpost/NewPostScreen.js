@@ -11,7 +11,7 @@ import { useGetAllAuthsQuery, useGetAuthQuery } from '../../store/apiSlice';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window');
 
-const NewPostScreen = ({ route }) => {
+const NewPostScreen = ({ navigation }) => {
     const [currentUser, setCurrentUser] = useState([]);
 
     const [newPost, setNewPost] = useState('');
@@ -21,8 +21,6 @@ const NewPostScreen = ({ route }) => {
 
     const useremail = currentUser.email;
     const { data, error, isLoading } = useGetAuthQuery(useremail);
-
-    // console.log(data?.data);
 
     useEffect(() => {
         setCurrentUser(auth().currentUser);
@@ -48,7 +46,6 @@ const NewPostScreen = ({ route }) => {
             return null; //이미지 업로드를 취소한 경우
         }
 
-        // console.log(result);
         setImageUrl(result.assets[0].uri);
         // 이미지 업로드 결과 및 이미지 경로 업데이트
     };
@@ -57,28 +54,20 @@ const NewPostScreen = ({ route }) => {
         // 텍스트 및 이미지 데이터를 포함한 FormData 생성
         const formData = new FormData();
 
-        if (newPost) {
-            // 글 데이터가 있을 경우만 추가
-            formData.append('text', newPost);
-            formData.append('QnA', toggleCheckBox);
-        }
+        // if (newPost) {
+        // 글 데이터가 있을 경우만 추가
+        formData.append('text', newPost);
+        formData.append('QnA', toggleCheckBox);
+        // }
 
         if (imageUrl) {
             // 이미지 데이터가 있을 경우만 추가
             const localUri = imageUrl;
-            // const filename = localUri.split('/').pop();
-            // const match = /\.(\w+)$/.exec(filename ?? '');
-            // const type = match ? `image/${match[1]}` : `image`;
             formData.append('post_image', {
-                name: '_post_image',
+                name: new Date() + '_post_image',
                 uri: localUri,
-                // type: type,
                 type: 'image/jpeg',
             });
-            // formData.append('img_name', new Date() + '_post_image');
-            // formData.append('img_uri', localUri);
-            // formData.append('img_type', type);
-            // console.log(formData._parts);
         }
 
         formData.append('user_id', data?.data._id);
@@ -91,8 +80,7 @@ const NewPostScreen = ({ route }) => {
             method: 'post',
             url: 'http://localhost:3000/posts/upload-profile',
             headers: {
-                Accept: 'application/json',
-                // 'content-type': 'multipart/form-data',
+                'content-type': 'multipart/form-data',
             },
             data: formData,
         });
@@ -100,8 +88,7 @@ const NewPostScreen = ({ route }) => {
         // 업로드 후 초기화
         setImageUrl('');
         setNewPost('');
-
-        // console.log('imageUrl', imageUrl);
+        navigation.goBack();
     };
 
     return (
@@ -176,12 +163,10 @@ const NewPostInputBox = styled.View`
 `;
 
 const NewPostInput = styled.TextInput`
-    /* background-color: yellowgreen; */
     padding: 20px;
 `;
 
 const NewPostFooterBox = styled.View`
-    /* background-color: yellow; */
     position: absolute;
     bottom: 10px;
     width: 100%;
@@ -190,7 +175,6 @@ const NewPostFooterBox = styled.View`
 `;
 
 const ImgSelectIconBox = styled.TouchableOpacity`
-    /* background-color: aqua; */
     width: 40px;
     height: 40px;
     justify-content: center;
@@ -198,7 +182,6 @@ const ImgSelectIconBox = styled.TouchableOpacity`
 `;
 
 const NewPostSelectBox = styled.View`
-    /* background-color: yellowgreen; */
     margin-top: 20px;
     flex-direction: row;
     justify-content: space-between;

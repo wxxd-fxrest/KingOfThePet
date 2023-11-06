@@ -24,14 +24,9 @@ const MainTab = () => {
                     title: '홈',
                     headerShown: true,
                     headerShadowVisible: false,
+                    unmountOnBlur: true,
                     tabBarIcon: ({ focused, size }) => {
-                        return (
-                            <Fontisto
-                                name="island"
-                                size={size}
-                                color={focused ? '#6b8a47' : '#a7c585'}
-                            />
-                        );
+                        return <Fontisto name="island" size={size} color={focused ? '#6b8a47' : '#a7c585'} />;
                     },
                 }}
             />
@@ -43,11 +38,7 @@ const MainTab = () => {
                     showLable: false,
                     tabBarIcon: ({ focused, size }) => {
                         return (
-                            <MaterialCommunityIcons
-                                name="dog"
-                                size={size}
-                                color={focused ? '#6b8a47' : '#a7c585'}
-                            />
+                            <MaterialCommunityIcons name="dog" size={size} color={focused ? '#6b8a47' : '#a7c585'} />
                         );
                     },
                 }}
