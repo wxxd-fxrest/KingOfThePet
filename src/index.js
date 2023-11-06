@@ -17,6 +17,9 @@ app.use('/images', express.static('images'));
 app.get('/', (req, res) => {
     res.send('<h2>Hello world!</h2>');
 });
+app.get('/posts', (req, res) => {
+    res.send('<h2>Hello world!</h2>');
+});
 
 app.listen(PORT, () => {
     console.log('API is listening on port ', PORT);

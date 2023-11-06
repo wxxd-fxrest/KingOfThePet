@@ -25,37 +25,37 @@ router.get('/:postID', async (req, res) => {
     }
 });
 
-// const storage = multer.diskStorage({});
-
-// const fileFilter = (req, file, cb) => {
-//     if (file.mimetype.startsWith('image')) {
-//         cb(null, true);
-//         // console.log(req.rawHeaders);
-//     } else {
-//         cb('invalid image file!', false);
-//     }
-// };
-
-// const uploads = multer({ storage, fileFilter });
-
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'images');
     },
     filename: (req, file, cb) => {
-        console.log(file);
+        // 파일 확장자에 따라 Content-Type 설정
+        let contentType;
+        if (file.originalname.endsWith('.jpg') || file.originalname.endsWith('.jpeg')) {
+            contentType = 'image/jpeg';
+        } else if (file.originalname.endsWith('.png')) {
+            contentType = 'image/png';
+        } else {
+            contentType = 'image'; // 기본 Content-Type
+        }
+
         cb(null, `${Date.now()}${file.originalname}`);
+
+        // Content-Type을 설정
+        file.contentType = contentType;
     },
 });
+
 const upload = multer({ storage: storage });
 
 // 이미지 url이 같이 업로드되지 않음
 router.post('/upload-profile', upload.single('post_image'), async (req, res) => {
-    console.log(req.file);
     const postData = {
         text: req.body.text,
         QnA: req.body.QnA,
     };
+
     const ref = (Math.random() + 1).toString(36).substring(7);
     postData.ref = ref;
 
@@ -65,18 +65,10 @@ router.post('/upload-profile', upload.single('post_image'), async (req, res) => 
         username: req.body.username,
     };
 
-    const image = {
-        img_name: req.body.img_name,
-        img_uri: req.body.img_uri,
-        img_type: req.body.img_type,
-    };
-
     const imgData = req.file;
-    // console.log(imgData);
 
     const newPost = await createPost({
         userData,
-        // image,
         postData,
         imgData,
     });
