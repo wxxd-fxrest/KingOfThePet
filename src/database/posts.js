@@ -2,7 +2,7 @@ const { ObjectId } = require('mongodb');
 const getDB = require('./db');
 
 const getAllPosts = async () => {
-    return await getDB().posts.find().toArray();
+    return await getDB().posts.find().sort({ _id: -1 }).toArray();
 };
 
 const getPost = async (id) => {

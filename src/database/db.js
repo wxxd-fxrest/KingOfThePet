@@ -13,11 +13,13 @@ const getDB = () => {
     const database = client.db('test');
     const auths = database.collection('auth');
     const posts = database.collection('posts');
+    const diarys = database.collection('diarys');
 
     return {
         auths,
-        posts
-    }
+        posts,
+        diarys,
+    };
 };
 
 module.exports = getDB;
