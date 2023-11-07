@@ -30,6 +30,7 @@ const MainScreen = ({ navigation }) => {
 
     return (
         <Tab.Navigator
+            initialRouteName="All"
             screenOptions={{
                 tabBarActiveTintColor: '#6b8a47',
                 tabBarInactiveTintColor: '#a7c585',
@@ -49,18 +50,18 @@ const MainScreen = ({ navigation }) => {
             }}
         >
             <Tab.Screen
-                name="All"
-                children={() => <AllScreen currentUser={currentUser} />}
-                options={{
-                    title: '전체',
-                    unmountOnBlur: true,
-                }}
-            />
-            <Tab.Screen
                 name="QnA"
                 component={QnAScreen}
                 options={{
                     title: '질문',
+                    unmountOnBlur: true,
+                }}
+            />
+            <Tab.Screen
+                name="All"
+                children={() => <AllScreen currentUser={currentUser} />}
+                options={{
+                    title: '전체',
                     unmountOnBlur: true,
                 }}
             />

@@ -1,82 +1,90 @@
-import React from "react";
-import { ActivityIndicator, FlatList, Text } from "react-native";
-import styled from "styled-components";
-import { useGetAllPostsQuery } from "../../store/apiSlice";
+import React from 'react';
+import { ActivityIndicator, FlatList, Text } from 'react-native';
+import styled from 'styled-components';
+import { useGetAllPostsQuery } from '../../store/apiSlice';
+import UserImg from '../../assets/user.png';
 
 const QnAScreen = () => {
-    // const postdata = useSelector((state) => state.postdata.postdata);
-
     const { data, error, isLoading } = useGetAllPostsQuery();
 
     if (isLoading) {
         return <ActivityIndicator />;
     }
-    
-    if(error) {
-        console.log(error.error)
-        return <Text> {error.error} </Text>
+
+    if (error) {
+        console.log(error.error);
+        return <Text> {error.error} </Text>;
     }
 
     const postdata = data.data;
 
     return (
         <Container>
-            <FlatList data={postdata}
+            <FlatList
+                data={postdata}
                 renderItem={({ item }) => (
                     <>
-                        {item.qna_boolen === true &&
-                        <PostBox>
-                            <PostProfileImg source={{uri: item.userimg}}/>
-                            <PostDataBox>
-                                <PostNameQnA>
-                                    <PostProfileName> {item.username} </PostProfileName>
-                                    {item.qna_boolen === true &&
+                        {item.postData.QnA === 'true' && (
+                            <PostBox>
+                                <PostProfileImgBox>
+                                    <PostProfileImg source={UserImg} />
+                                </PostProfileImgBox>
+                                <PostDataBox>
+                                    <PostNameQnA>
+                                        <PostProfileName> {item.userData.username} </PostProfileName>
                                         <QnABox>
                                             <PostQnA> 질문 </PostQnA>
                                         </QnABox>
-                                    }
-                                </PostNameQnA>
-                                {item.image &&
-                                    <PostImgBox>
-                                        <PostImg source={{uri: item.image}} />
-                                    </PostImgBox>
-                                }
-                                {item.description &&
-                                    <PostText> {item.description} </PostText>
-                                }
-                            </PostDataBox>
-                        </PostBox>}
+                                    </PostNameQnA>
+                                    {item.imgData && (
+                                        <PostImgBox>
+                                            <PostImg
+                                                source={{
+                                                    uri: `http://localhost:3000/images/${item.imgData.filename}`,
+                                                }}
+                                            />
+                                        </PostImgBox>
+                                    )}
+                                    {item.postData && <PostText> {item.postData.text} </PostText>}
+                                </PostDataBox>
+                            </PostBox>
+                        )}
                     </>
                 )}
                 keyExtractor={(item) => item.id}
                 showsVerticalScrollIndicator={false}
             />
         </Container>
-    )
+    );
 };
 
 const Container = styled.View`
     flex: 1;
     background-color: white;
-    /* padding: 0px 15px; */
 `;
 
 const PostBox = styled.View`
     flex-direction: row;
-    /* background-color: rgba(107, 138, 71, 0.4); */
     background-color: #d3e2c2;
     margin: 18px 20px;
     padding: 10px;
     border-radius: 20px;
 `;
 
+const PostProfileImgBox = styled.View`
+    background-color: gray;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    border-radius: 100px;
+    justify-content: center;
+    align-items: center;
+`;
+
 const PostProfileImg = styled.Image`
     width: 40px;
     height: 40px;
     border-radius: 100px;
-    position: absolute;
-    top: -10px;
-    right: -10px;
 `;
 
 const PostDataBox = styled.View`
@@ -126,4 +134,4 @@ const PostImg = styled.Image`
     border-radius: 10px;
 `;
 
-export default QnAScreen; 
+export default QnAScreen;

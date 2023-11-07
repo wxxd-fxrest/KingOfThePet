@@ -14,11 +14,26 @@ export const apiSlice = createApi({
         }),
         createPost: builder.mutation({
             query: (newPost) => ({
-                url: 'posts/upload-profile',
+                url: 'posts/upload-posts',
                 method: 'POST',
                 body: newPost,
             }),
         }),
+
+        getAllDiarys: builder.query({
+            query: () => 'diarys',
+        }),
+        getDiary: builder.query({
+            query: (id) => `diarys/${id}`,
+        }),
+        createDiary: builder.mutation({
+            query: (newDiary) => ({
+                url: 'diarys/upload-diarys',
+                method: 'POST',
+                body: newDiary,
+            }),
+        }),
+
         createAuth: builder.mutation({
             query: (newAuth) => ({
                 url: 'auths',
@@ -35,13 +50,16 @@ export const apiSlice = createApi({
     }),
 });
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
 export const {
     useCreateAuthMutation,
     useGetAuthQuery,
     useGetAllAuthsQuery,
+
     useGetAllPostsQuery,
     useGetPostQuery,
     useCreatePostMutation,
+
+    useGetAllDiarysQuery,
+    useGetDiaryQuery,
+    useCreateDiaryMutation,
 } = apiSlice;

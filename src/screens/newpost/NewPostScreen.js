@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Dimensions, Text } from 'react-native';
+import { Dimensions } from 'react-native';
 import styled from 'styled-components';
 import { Ionicons } from '@expo/vector-icons';
 import CheckBox from '@react-native-community/checkbox';
@@ -7,7 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import FormData from 'form-data';
 import auth from '@react-native-firebase/auth';
-import { useGetAllAuthsQuery, useGetAuthQuery } from '../../store/apiSlice';
+import { useGetAuthQuery } from '../../store/apiSlice';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window');
 
@@ -78,7 +78,7 @@ const NewPostScreen = ({ navigation }) => {
         // 서버에 데이터 전송
         await axios({
             method: 'post',
-            url: 'http://localhost:3000/posts/upload-profile',
+            url: 'http://localhost:3000/posts/upload-posts',
             headers: {
                 'content-type': 'multipart/form-data',
             },
@@ -88,7 +88,7 @@ const NewPostScreen = ({ navigation }) => {
         // 업로드 후 초기화
         setImageUrl('');
         setNewPost('');
-        navigation.goBack();
+        navigation.navigate('MainTab', { screen: 'Main' });
     };
 
     return (
@@ -97,6 +97,15 @@ const NewPostScreen = ({ navigation }) => {
                 <SaveText> 저장 </SaveText>
             </SaveBtn>
             <NewPostInputBox>
+                <ImageContainer onPress={uploadImage}>
+                    <PreviewBox>
+                        {imageUrl ? (
+                            <PreviewImg source={{ uri: imageUrl }} />
+                        ) : (
+                            <Ionicons name="ios-camera" size={30} color="#6b8a47" />
+                        )}
+                    </PreviewBox>
+                </ImageContainer>
                 <NewPostInput
                     value={newPost}
                     placeholder="내용을 입력해 주세요."
@@ -108,11 +117,6 @@ const NewPostScreen = ({ navigation }) => {
                     returnKeyType="search"
                     onChangeText={(text) => setNewPost(text)}
                 />
-                <NewPostFooterBox>
-                    <ImgSelectIconBox onPress={uploadImage}>
-                        <Ionicons name="ios-camera" size={28} color="#6b8a47" />
-                    </ImgSelectIconBox>
-                </NewPostFooterBox>
             </NewPostInputBox>
             <NewPostSelectBox>
                 {toggleCheckBox ? (
@@ -155,44 +159,54 @@ const SaveText = styled.Text`
 `;
 
 const NewPostInputBox = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
     background-color: rgb(234, 234, 234);
-    height: ${SCREENHEIGHT / 3.5}px;
-    padding-bottom: 55px;
-    border-radius: 15px;
+    height: ${SCREENHEIGHT / 3.8}px;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
     position: relative;
+    padding: 0px 10px;
+    padding-top: 10px;
 `;
 
-const NewPostInput = styled.TextInput`
-    padding: 20px;
-`;
-
-const NewPostFooterBox = styled.View`
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    padding: 0px 20px;
-    align-items: flex-end;
-`;
-
-const ImgSelectIconBox = styled.TouchableOpacity`
-    width: 40px;
-    height: 40px;
+const ImageContainer = styled.TouchableOpacity`
+    background-color: rgba(189, 189, 189, 0.5);
+    width: 40%;
+    aspect-ratio: 0.65;
+    border-radius: 4px;
     justify-content: center;
     align-items: center;
 `;
 
+const PreviewBox = styled.View``;
+
+const PreviewImg = styled.Image`
+    width: 100%;
+    aspect-ratio: 0.65;
+    border-radius: 4px;
+`;
+
+const NewPostInput = styled.TextInput`
+    width: 55%;
+    margin: 10px 0px;
+`;
+
 const NewPostSelectBox = styled.View`
-    margin-top: 20px;
+    background-color: yellowgreen;
+    background-color: rgb(234, 234, 234);
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
-    padding: 0px 10px;
+    padding: 10px 10px;
+    height: 55px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 `;
 
 const QnACheckText = styled.Text`
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 500;
-    color: #353535;
+    color: #8c8c8c;
 `;
 
 const QnACheckInput = styled(CheckBox)``;

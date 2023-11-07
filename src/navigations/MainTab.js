@@ -1,10 +1,10 @@
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React, { useEffect, useState } from 'react';
+import { Fontisto } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import styled from 'styled-components';
 import MainScreen from '../screens/MainScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import { Fontisto } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,6 +35,8 @@ const MainTab = () => {
                 component={ProfileScreen}
                 options={{
                     title: '프로필',
+                    headerShown: true,
+                    headerShadowVisible: false,
                     showLable: false,
                     tabBarIcon: ({ focused, size }) => {
                         return (

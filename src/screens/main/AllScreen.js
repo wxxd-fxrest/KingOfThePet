@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, RefreshControl, Text } from 'react-native';
+import React from 'react';
+import { ActivityIndicator, FlatList, Text } from 'react-native';
 import styled from 'styled-components';
 import { useGetAllPostsQuery } from '../../store/apiSlice';
 import UserImg from '../../assets/user.png';
@@ -22,15 +22,9 @@ const AllScreen = () => {
         <Container>
             <FlatList
                 data={postdata}
-                inverted={true}
                 renderItem={({ item }) => (
                     <PostBox>
                         <PostProfileImgBox>
-                            {/* <PostProfileImg
-                                source={
-                                    item.userData && item.userData.userimg ? { uri: item.imgData.filename } : UserImg
-                                }
-                            /> */}
                             <PostProfileImg source={UserImg} />
                         </PostProfileImgBox>
                         <PostDataBox>
@@ -134,22 +128,6 @@ const PostImg = styled.Image`
     width: 100%;
     aspect-ratio: 1;
     border-radius: 10px;
-`;
-
-const Button = styled.TouchableOpacity`
-    width: 100%;
-    padding: 10px 20px;
-    border-width: 1px;
-    border-radius: 20px;
-    border-color: #6b8a47;
-    justify-content: center;
-    align-items: center;
-    background-color: #6b8a47;
-`;
-
-const ButtonText = styled.Text`
-    font-size: 16px;
-    color: white;
 `;
 
 export default AllScreen;
