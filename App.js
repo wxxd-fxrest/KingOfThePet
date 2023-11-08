@@ -8,7 +8,6 @@ import AuthRoot from './src/navigations/AuthRoot';
 import MainRoot from './src/navigations/MainRoot';
 import { store } from './src/store';
 import auth from '@react-native-firebase/auth';
-import SplashScreen from 'react-native-splash-screen';
 import AppLoading from 'expo-app-loading';
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
@@ -38,18 +37,8 @@ export default function App() {
         await Promise.all([...fonts]);
     };
 
-    // useEffect(() => {
-    //     SplashScreen.hide();
-    // }, []);
-
     if (!ready) {
-        return (
-            <AppLoading
-                startAsync={startLoading}
-                onFinish={onFinish}
-                onError={console.error}
-            />
-        );
+        return <AppLoading startAsync={startLoading} onFinish={onFinish} onError={console.error} />;
     }
 
     return (

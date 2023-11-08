@@ -2,15 +2,12 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import auth from '@react-native-firebase/auth';
 import { Alert } from 'react-native';
-import { useGetAuthQuery } from '../store/apiSlice';
 import UserImg from '../assets/user.png';
+import ProfileStack from '../navigations/ProfileStack';
 
 const ProfileScreen = () => {
     const [currentUser, setCurrentUser] = useState([]);
-
     const useremail = currentUser.email;
-    const { data, error, isLoading } = useGetAuthQuery(useremail);
-    console.log(data?.data);
 
     useEffect(() => {
         setCurrentUser(auth().currentUser);
@@ -47,6 +44,7 @@ const ProfileScreen = () => {
             <LogoutButton onPress={onLogOut}>
                 <LogoutButtonText> 로그아웃 </LogoutButtonText>
             </LogoutButton>
+            <ProfileStack useremail={useremail} />
         </Container>
     );
 };
@@ -57,13 +55,16 @@ const Container = styled.View`
 `;
 
 const ProfileImageBox = styled.View`
-    width: 100px;
-    height: 100px;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 `;
 
 const ProfileImage = styled.Image`
-    width: 50px;
-    height: 50px;
+    background-color: gray;
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
 `;
 
 const LogoutButton = styled.TouchableOpacity`
@@ -71,6 +72,9 @@ const LogoutButton = styled.TouchableOpacity`
     justify-content: center;
     align-items: center;
     padding: 45px 0px;
+    position: absolute;
+    top: -30px;
+    right: 0px;
 `;
 
 const LogoutButtonText = styled.Text`

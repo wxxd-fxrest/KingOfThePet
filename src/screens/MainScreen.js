@@ -59,7 +59,7 @@ const MainScreen = ({ navigation }) => {
             />
             <Tab.Screen
                 name="All"
-                children={() => <AllScreen currentUser={currentUser} />}
+                children={() => <AllScreen />}
                 options={{
                     title: '전체',
                     unmountOnBlur: true,
