@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { MaterialIcons } from '@expo/vector-icons';
 import NewPostStack from './NewPostStack';
+import DetailScreen from '../screens/detail/DetailScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -11,6 +12,7 @@ const MainStack = ({ navigation }) => {
         <Stack.Navigator
             screenOptions={{
                 headerShown: false,
+                headerTintColor: '#6b8a47',
             }}
         >
             <Stack.Screen
@@ -18,6 +20,25 @@ const MainStack = ({ navigation }) => {
                 component={NewPostStack}
                 options={{
                     title: '포스트 작성',
+                    headerShown: true,
+                    headerShadowVisible: false,
+                    headerLeft: () => (
+                        <BackButton>
+                            <MaterialIcons
+                                name="arrow-back-ios"
+                                size={25}
+                                color="#6b8a47"
+                                onPress={() => navigation.goBack()}
+                            />
+                        </BackButton>
+                    ),
+                }}
+            />
+            <Stack.Screen
+                name="DetailScreen"
+                component={DetailScreen}
+                options={{
+                    title: '상세페이지',
                     headerShown: true,
                     headerShadowVisible: false,
                     headerLeft: () => (

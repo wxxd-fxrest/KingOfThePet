@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useGetAllPostsQuery } from '../../store/apiSlice';
 import UserImg from '../../assets/user.png';
 
-const AllScreen = () => {
+const AllScreen = ({ navigation }) => {
     const { data, error, isLoading } = useGetAllPostsQuery();
 
     if (isLoading) {
@@ -23,7 +23,7 @@ const AllScreen = () => {
             <FlatList
                 data={postdata}
                 renderItem={({ item }) => (
-                    <PostBox>
+                    <PostBox onPress={() => navigation.navigate('MainStack', { screen: 'DetailScreen', params: item })}>
                         <PostProfileImgBox>
                             <PostProfileImg source={UserImg} />
                         </PostProfileImgBox>
@@ -59,7 +59,7 @@ const Container = styled.View`
     background-color: white;
 `;
 
-const PostBox = styled.View`
+const PostBox = styled.TouchableOpacity`
     flex-direction: row;
     background-color: #d3e2c2;
     margin: 18px 20px;
