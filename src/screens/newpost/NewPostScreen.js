@@ -10,7 +10,7 @@ import auth from '@react-native-firebase/auth';
 import { useGetAuthQuery } from '../../store/apiSlice';
 
 const { width: SCREENWIDTH, height: SCREENHEIGHT } = Dimensions.get('window');
-
+test;
 const NewPostScreen = ({ navigation }) => {
     const [currentUser, setCurrentUser] = useState([]);
 
