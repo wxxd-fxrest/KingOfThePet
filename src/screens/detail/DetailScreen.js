@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 const DetailScreen = ({ route: params }) => {
     const item = params.params;
+    const image = item.imgData;
     const [post, setPost] = useState(false);
     const [heart, setHeart] = useState(false);
 
@@ -31,23 +32,23 @@ const DetailScreen = ({ route: params }) => {
                             </QnABox>
                         )}
                     </PostNameQnA>
+                    {item.postData ? <PostText image={image}> {item.postData.text} </PostText> : null}
                     {item.imgData && (
                         <PostImgBox>
                             <PostImg source={{ uri: `http://localhost:3000/images/${item.imgData.filename}` }} />
                         </PostImgBox>
                     )}
-                    {item.postData ? <PostText post={post}> {item.postData.text} </PostText> : null}
                 </PostDataBox>
                 <BottomBox>
-                    <CommentBtn>
-                        <MaterialCommunityIcons name="comment-text-multiple" size={24} color="#6b8a47" />
-                    </CommentBtn>
+                    {/* <CommentBtn>
+                        <MaterialCommunityIcons name="comment-text-multiple" size={24} color="#807d7d" />
+                    </CommentBtn> */}
                     <LikeBtn
                         onPress={() => {
                             setHeart(!heart);
                         }}
                     >
-                        <Ionicons name={heart === false ? 'heart-outline' : 'ios-heart'} size={24} color="#6b8a47" />
+                        <Ionicons name={heart === false ? 'heart-outline' : 'ios-heart'} size={24} color="#807d7d" />
                     </LikeBtn>
                 </BottomBox>
             </PostBox>
@@ -56,9 +57,9 @@ const DetailScreen = ({ route: params }) => {
 };
 
 const Container = styled.ScrollView`
-    background-color: #d3e2c2;
+    background-color: white;
     flex: 1;
-    padding: 10px;
+    padding: 5px 10px;
 `;
 
 const PostBox = styled.View`
@@ -74,8 +75,8 @@ const PostProfileImgBox = styled.View`
 `;
 
 const PostProfileImg = styled.Image`
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     border-radius: 100px;
 `;
 
@@ -86,6 +87,7 @@ const PostDataBox = styled.View`
 const PostNameQnA = styled.View`
     flex-direction: row;
     align-items: flex-end;
+    margin-bottom: 15px;
 `;
 
 const PostProfileName = styled.Text`
@@ -105,32 +107,33 @@ const QnABox = styled.View`
 `;
 
 const PostQnA = styled.Text`
-    color: #646462;
+    color: #d4d4d4;
 `;
 
 const PostText = styled.Text`
     font-size: 16px;
-    padding: ${(props) => (props.post === true ? '20px 0px' : '0')};
+    padding-bottom: ${(props) => (props.image === null ? '10px' : '0px')};
 `;
 
 const PostImgBox = styled.View`
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding-top: 20px;
+    padding: 15px 0px;
 `;
 
 const PostImg = styled.Image`
-    width: 90%;
-    aspect-ratio: 1.3;
+    width: 100%;
+    aspect-ratio: 1.5;
     border-radius: 10px;
 `;
 
 const BottomBox = styled.View`
-    border-top-color: #c0cfb0;
+    border-top-color: #d4d4d4;
     border-top-width: 1px;
-    padding: 15px 10px;
+    padding: 8px 10px;
     flex-direction: row;
+    justify-content: flex-end;
 `;
 
 const CommentBtn = styled.TouchableOpacity``;
