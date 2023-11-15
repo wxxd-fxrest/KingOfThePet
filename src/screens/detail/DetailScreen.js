@@ -16,6 +16,8 @@ const DetailScreen = ({ route: params }) => {
         }
     }, [post]);
 
+    // test master
+
     return (
         <Container>
             <PostBox>
@@ -40,9 +42,6 @@ const DetailScreen = ({ route: params }) => {
                     )}
                 </PostDataBox>
                 <BottomBox>
-                    {/* <CommentBtn>
-                        <MaterialCommunityIcons name="comment-text-multiple" size={24} color="#807d7d" />
-                    </CommentBtn> */}
                     <LikeBtn
                         onPress={() => {
                             setHeart(!heart);
