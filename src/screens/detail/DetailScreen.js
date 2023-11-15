@@ -52,6 +52,7 @@ const DetailScreen = ({ route: params }) => {
         </Container>
     );
 };
+// test1
 
 const Container = styled.ScrollView`
     background-color: white;
