@@ -17,6 +17,8 @@ const DetailScreen = ({ route: params }) => {
     }, [post]);
 
     // test master
+    // test test
+    // test test1
 
     return (
         <Container>
